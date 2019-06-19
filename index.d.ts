@@ -1,12 +1,12 @@
 /// <reference types="react" />
 
-type Diff<T, U> = import("./lib/utils").Diff<T, U>;
-type KeyMirror<T> = import("./lib/utils").KeyMirror<T>;
-type OverrideT<T> = import("./lib/utils").OverrideT<T>;
-type Primitives = import("./lib/utils").Primitives;
-type ResponsiveT<T> = import("./lib/utils").ResponsiveT<T>;
-type Theme = import("./lib/utils").Theme;
-type ThemeProps = import("./lib/utils").ThemeProps;
+type Diff<T, U> = import("./utils").Diff<T, U>;
+type KeyMirror<T> = import("./utils").KeyMirror<T>;
+type OverrideT<T> = import("./utils").OverrideT<T>;
+type Primitives = import("./utils").Primitives;
+type ResponsiveT<T> = import("./utils").ResponsiveT<T>;
+type Theme = import("./utils").Theme;
+type ThemeProps = import("./utils").ThemeProps;
 
 declare module "baseui" {
   export const LightTheme: Theme;
