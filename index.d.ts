@@ -397,3 +397,26 @@ declare module "baseui/block" {
   export type StyledBlockProps = StyledBlockPropsT;
   export class Block extends React.Component<BlockPropsT> {}
 }
+
+declare module "baseui/breadcrumbs" {
+  type OverridesT<T> = {
+    Root?: OverrideT<T>;
+    Separator?: OverrideT<T>;
+    Icon?: OverrideT<T>;
+  };
+
+  type BreadcrumbsPropsT = {
+    children?: React.ReactNode;
+    overrides?: OverridesT<{}>;
+    ariaLabel?: string;
+  };
+
+  export type BreadcrumbsProps = BreadcrumbsPropsT;
+  export class Breadcrumbs extends React.Component<BreadcrumbsPropsT> {}
+  export class StyledRoot extends React.Component<
+    JSX.IntrinsicElements["nav"]
+  > {}
+  export class StyledSeperator extends React.Component<
+    JSX.IntrinsicElements["div"]
+  > {}
+}

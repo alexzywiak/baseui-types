@@ -7,6 +7,12 @@ import {
   styled
 } from "baseui";
 import { Block, BlockProps, StyledBlockProps } from "baseui/block";
+import {
+  Breadcrumbs,
+  BreadcrumbsProps,
+  StyledRoot,
+  StyledSeperator
+} from "baseui/breadcrumbs";
 
 class TestComponent extends React.Component {
   render() {
@@ -77,6 +83,10 @@ class TestComponent extends React.Component {
     }));
     return (
       <>
+        {/* Styled */}
+        <StyledComponent as="div" />
+        <StyledTag text-align="center" />
+
         {/* BaseProvider */}
         <BaseProvider theme={theme} />
 
@@ -97,6 +107,44 @@ class TestComponent extends React.Component {
         <Block
           overrides={{
             Block: {
+              style: {
+                margin: "10px"
+              },
+              component: Block
+            }
+          }}
+        />
+
+        {/* Breadcrumbs */}
+        <Breadcrumbs
+          ariaLabel="label"
+          overrides={{
+            Root: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children }) => <div />
+            },
+            Separator: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children }) => <div />
+            }
+          }}
+        />
+        <Breadcrumbs
+          ariaLabel="label"
+          overrides={{
+            Root: {
+              style: {
+                margin: "10px"
+              },
+              component: Block
+            },
+            Separator: {
               style: {
                 margin: "10px"
               },
