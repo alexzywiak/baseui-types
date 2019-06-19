@@ -37,6 +37,8 @@ import {
   StyledNavigationItem,
   StyledNavigationList
 } from "baseui/header-navigation";
+import { Icon, StyledSvg, StyledComponentArgsT } from "baseui/icon";
+import ChevronLeft from "baseui/icon/chevron-left";
 
 class StyledBlock extends React.Component<StyledBlockPropsT> {}
 
@@ -268,7 +270,7 @@ class TestComponent extends React.Component {
           flexGridColumnGap={["scale100", "scale200"]}
         />
 
-        {/* Header Navigtation */}
+        {/* Header Navigation */}
         <HeaderNavigation
           overrides={{
             Root: {
@@ -296,6 +298,14 @@ class TestComponent extends React.Component {
         />
         <StyledNavigationItem />
         <StyledNavigationList $align="right" />
+
+        {/* Icon */}
+        <ChevronLeft size="wickedhuge" />
+        <ChevronLeft
+          overrides={{
+            Svg: { style: ({ $theme, $size }) => ({}), component: StyledSvg }
+          }}
+        />
       </>
     );
   }
