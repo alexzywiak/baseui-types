@@ -6,7 +6,7 @@ export type StyleOverrideT<T> =
 
 export type OverrideObjectT<T> = {
   component?:
-    | React.ComponentClass
+    | React.ComponentClass<T>
     | ((
         args: T & { children: React.ReactNode; $style?: React.CSSProperties }
       ) => React.ReactNode);

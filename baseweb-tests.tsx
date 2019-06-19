@@ -6,13 +6,39 @@ import {
   createTheme,
   styled
 } from "baseui";
-import { Block, BlockProps, StyledBlockProps } from "baseui/block";
+import { Block, BlockPropsT, StyledBlockPropsT } from "baseui/block";
 import {
   Breadcrumbs,
-  BreadcrumbsProps,
-  StyledRoot,
+  BreadcrumbsPropsT,
+  StyledRoot as BreadCrumbsStyledRoot,
   StyledSeperator
 } from "baseui/breadcrumbs";
+import {
+  Button,
+  StyledBaseButton,
+  StyledEndEnhancer,
+  StyledLoadingSpinner,
+  StyledLoadingSpinnerContainer,
+  StyledStartEnhancer,
+  KIND,
+  SHAPE,
+  SIZE
+} from "baseui/button";
+import {
+  FlexGrid,
+  FlexGridItem,
+  FlexGridPropsT,
+  FlexGridItemPropsT
+} from "baseui/flex-grid";
+import {
+  ALIGN,
+  HeaderNavigation,
+  StyledRoot as HeaderNavigationStyledRoot,
+  StyledNavigationItem,
+  StyledNavigationList
+} from "baseui/header-navigation";
+
+class StyledBlock extends React.Component<StyledBlockPropsT> {}
 
 class TestComponent extends React.Component {
   render() {
@@ -74,13 +100,17 @@ class TestComponent extends React.Component {
       { extraValue: "stoof" }
     );
     const StyledComponent = styled(Block, { margin: "10px" });
-    const StyledComponentTheme = styled(Block, ({ $theme }) => ({
-      margin: $theme.sizing.scale100
-    }));
+    const StyledComponentTheme = styled<StyledBlockPropsT>(
+      StyledBlock,
+      ({ $theme, $as }) => ({
+        margin: $theme.sizing.scale100
+      })
+    );
     const StyledTag = styled("div", { margin: "10px" });
-    const StyledTagTheme = styled("div", ({ $theme }) => ({
+    const StyledTagTheme = styled<{ $extra: string }>("div", ({ $theme }) => ({
       margin: $theme.sizing.scale100
     }));
+
     return (
       <>
         {/* Styled */}
@@ -110,8 +140,13 @@ class TestComponent extends React.Component {
               style: {
                 margin: "10px"
               },
-              component: Block
+              component: StyledBlock
             }
+          }}
+        />
+        <Block
+          overrides={{
+            Block: StyledBlock
           }}
         />
 
@@ -152,6 +187,115 @@ class TestComponent extends React.Component {
             }
           }}
         />
+        <Breadcrumbs
+          ariaLabel="label"
+          overrides={{
+            Root: BreadCrumbsStyledRoot,
+            Separator: StyledSeperator
+          }}
+        />
+
+        {/* Button */}
+        <Button size="compact" />
+        <Button
+          overrides={{
+            BaseButton: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            EndEnhancer: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            LoadingSpinner: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            LoadingSpinnerContainer: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            StartEnhancer: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            }
+          }}
+        />
+        <Button
+          overrides={{
+            BaseButton: {
+              component: StyledBaseButton
+            },
+            EndEnhancer: {
+              component: StyledBaseButton
+            },
+            LoadingSpinner: {
+              component: StyledBaseButton
+            },
+            LoadingSpinnerContainer: {
+              component: StyledBaseButton
+            },
+            StartEnhancer: {
+              component: StyledBaseButton
+            }
+          }}
+        />
+
+        {/* Flex Grid */}
+        <FlexGrid
+          as="div"
+          flexGridColumnCount={2}
+          flexGridColumnGap={["scale100", "scale200"]}
+        />
+        <FlexGridItem
+          as="div"
+          flexGridColumnCount={2}
+          flexGridColumnGap={["scale100", "scale200"]}
+        />
+
+        {/* Header Navigtation */}
+        <HeaderNavigation
+          overrides={{
+            Root: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              component: () => <div />
+            }
+          }}
+        />
+        <HeaderNavigation
+          overrides={{
+            Root: {
+              style: ({ $theme }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              component: Block
+            }
+          }}
+        />
+        <HeaderNavigation
+          overrides={{
+            Root: Block
+          }}
+        />
+        <StyledNavigationItem />
+        <StyledNavigationList $align="right" />
       </>
     );
   }

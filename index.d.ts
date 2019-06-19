@@ -2,6 +2,7 @@
 
 type OverrideT<T> = import("./lib/utils").OverrideT<T>;
 type Primitives = import("./lib/utils").Primitives;
+type ResponsiveT<T> = import("./lib/utils").ResponsiveT<T>;
 type Theme = import("./lib/utils").Theme;
 type ThemeProps = import("./lib/utils").ThemeProps;
 
@@ -15,19 +16,16 @@ declare module "baseui" {
     overrides?: T
   ): Theme & T;
 
-  export function styled<T extends keyof JSX.IntrinsicElements>(
-    tag: T,
-    styledFn: React.CSSProperties | ((args: ThemeProps) => React.CSSProperties)
-  ): React.ComponentType<JSX.IntrinsicElements[T]>;
-
-  export function styled<P>(
-    component: React.ComponentType<P>,
-    styledFn: React.CSSProperties | ((args: ThemeProps) => React.CSSProperties)
-  ): React.ComponentType<P>;
+  export function styled<SharedProps>(
+    component: keyof JSX.IntrinsicElements | React.ComponentType<SharedProps>,
+    styledFn:
+      | React.CSSProperties
+      | ((args: ThemeProps & SharedProps) => React.CSSProperties)
+  ): React.ComponentType<SharedProps>;
 }
 
 declare module "baseui/block" {
-  interface BlockPropsT extends JSX.IntrinsicAttributes {
+  export interface BlockPropsT {
     children?: React.ReactNode;
     /** Modifies the base element used to render the block. */
     as?: keyof JSX.IntrinsicElements;
@@ -332,8 +330,7 @@ declare module "baseui/block" {
     Block?: OverrideT<T>;
   };
 
-  type StyledBlockPropsT = {
-    $theme: Theme;
+  export type StyledBlockPropsT = {
     $as?: keyof JSX.IntrinsicElements;
     $color?: ResponsiveT<string>;
     $backgroundColor?: ResponsiveT<string>;
@@ -393,8 +390,6 @@ declare module "baseui/block" {
     $bottom?: ResponsiveT<ScaleT>;
   };
 
-  export type BlockProps = BlockPropsT;
-  export type StyledBlockProps = StyledBlockPropsT;
   export class Block extends React.Component<BlockPropsT> {}
 }
 
@@ -405,18 +400,104 @@ declare module "baseui/breadcrumbs" {
     Icon?: OverrideT<T>;
   };
 
-  type BreadcrumbsPropsT = {
+  export type BreadcrumbsPropsT = {
     children?: React.ReactNode;
     overrides?: OverridesT<{}>;
     ariaLabel?: string;
   };
 
-  export type BreadcrumbsProps = BreadcrumbsPropsT;
   export class Breadcrumbs extends React.Component<BreadcrumbsPropsT> {}
-  export class StyledRoot extends React.Component<
-    JSX.IntrinsicElements["nav"]
+  export class StyledRoot extends React.Component {}
+  export class StyledSeperator extends React.Component {}
+}
+
+declare module "baseui/button" {
+  type KIND = "primary" | "secondary" | "tertiary" | "minimal";
+  type SHAPE = "default" | "round" | "square";
+  type SIZE = "default" | "compact";
+
+  export type OverridesT<T> = {
+    BaseButton?: OverrideT<T>;
+    StartEnhancer?: OverrideT<T>;
+    EndEnhancer?: OverrideT<T>;
+    LoadingSpinnerContainer?: OverrideT<T>;
+    LoadingSpinner?: OverrideT<T>;
+  };
+
+  export type ButtonPropsT = {
+    children?: React.ReactNode;
+    disabled?: boolean;
+    /** A helper rendered at the end of the button. */
+    endEnhancer?: (props: SharedStyleProps) => React.ReactNode;
+    /** Show loading button style and spinner. */
+    isLoading?: boolean;
+    /** Indicates that the button is selected */
+    isSelected?: boolean;
+    /** Defines the kind (purpose) of a button */
+    kind?: KIND;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    overrides?: OverridesT<SharedStyleProps>;
+    /** Defines the shape of the button */
+    shape?: SHAPE;
+    /** Defines the size of the button */
+    size?: SIZE;
+    /** A helper rendered at the start of the button. */
+    startEnhancer?: (props: SharedStyleProps) => React.ReactNode;
+  };
+
+  export type SharedStyleProps = {
+    $kind?: SIZE;
+    $isSelected?: boolean;
+    $shape?: SHAPE;
+    $size?: SIZE;
+    $isLoading?: boolean;
+    $disabled?: boolean;
+  };
+
+  export class Button extends React.Component<ButtonPropsT> {}
+  export class StyledBaseButton extends React.Component<SharedStyleProps> {}
+  export class StyledStartEnhancer extends React.Component<SharedStyleProps> {}
+  export class StyledEndEnhancer extends React.Component<SharedStyleProps> {}
+  export class StyledLoadingSpinner extends React.Component<SharedStyleProps> {}
+  export class StyledLoadingSpinnerContainer extends React.Component<
+    SharedStyleProps
   > {}
-  export class StyledSeperator extends React.Component<
-    JSX.IntrinsicElements["div"]
-  > {}
+  export const KIND: KIND;
+  export const SIZE: SIZE;
+  export const SHAPE: SHAPE;
+}
+
+declare module "baseui/flex-grid" {
+  import { BlockPropsT, ScaleT } from "baseui/block";
+  export type FlexGridPropsT = {
+    /** Number of equal-width columns to allow for */
+    flexGridColumnCount?: ResponsiveT<number>;
+    /** Grid gap between columns */
+    flexGridColumnGap?: ResponsiveT<ScaleT>;
+    /** Grid gap between rows */
+    flexGridRowGap?: ResponsiveT<ScaleT>;
+  } & BlockPropsT;
+
+  export type FlexGridItemPropsT = FlexGridPropsT;
+  export class FlexGrid extends React.Component<FlexGridPropsT> {}
+  export class FlexGridItem extends React.Component<FlexGridItemPropsT> {}
+}
+
+declare module "baseui/header-navigation" {
+  type ALIGN = "center" | "left" | "right";
+  export type OverridesT<T> = {
+    Root?: OverrideT<T>;
+  };
+
+  export type PropsT = {
+    overrides?: OverridesT<{}>;
+  };
+
+  export class HeaderNavigation extends React.Component<PropsT> {}
+  export class StyledRoot extends React.Component<{}> {}
+  export class StyledNavigationItem extends React.Component<{}> {}
+  export class StyledNavigationList extends React.Component<{
+    $align: ALIGN;
+  }> {}
+  export const ALIGN: ALIGN;
 }
