@@ -1,5 +1,7 @@
 /// <reference types="react" />
 
+type Diff<T, U> = import("./lib/utils").Diff<T, U>;
+type KeyMirror<T> = import("./lib/utils").KeyMirror<T>;
 type OverrideT<T> = import("./lib/utils").OverrideT<T>;
 type Primitives = import("./lib/utils").Primitives;
 type ResponsiveT<T> = import("./lib/utils").ResponsiveT<T>;
@@ -462,9 +464,9 @@ declare module "baseui/button" {
   export class StyledLoadingSpinnerContainer extends React.Component<
     SharedStyleProps
   > {}
-  export const KIND: KIND;
-  export const SIZE: SIZE;
-  export const SHAPE: SHAPE;
+  export const KIND: KeyMirror<KIND>;
+  export const SIZE: KeyMirror<SIZE>;
+  export const SHAPE: KeyMirror<SHAPE>;
 }
 
 declare module "baseui/flex-grid" {
@@ -499,7 +501,7 @@ declare module "baseui/header-navigation" {
   export class StyledNavigationList extends React.Component<{
     $align: ALIGN;
   }> {}
-  export const ALIGN: ALIGN;
+  export const ALIGN: KeyMirror<ALIGN>;
 }
 declare module "baseui/icon" {
   export type OverridesT = {
@@ -543,4 +545,297 @@ declare module "baseui/icon/delete-alt" {
 
 declare module "baseui/icon/plus" {
   export { Icon as default } from "baseui/icon";
+}
+
+declare module "baseui/input" {
+  type STATE_CHANGE_TYPE = "change";
+
+  type CUSTOM_INPUT_TYPE = "textarea";
+
+  type ADJOINED = "none" | "left" | "right" | "both";
+
+  type SIZE = "default" | "compact";
+
+  type ENHANCER_POSITION = "start" | "end";
+
+  export type AdjoinedT = ADJOINED;
+
+  export type SizeT = SIZE;
+
+  export type StateTypeT = STATE_CHANGE_TYPE;
+
+  export type InternalStateT = {
+    /** Renders UI in 'focus' state */
+    isFocused?: boolean;
+  };
+
+  export type StateT = {
+    value?: string;
+  };
+
+  export type StateReducerT = (
+    stateType: StateTypeT,
+    nextState: StateT,
+    currentState: StateT
+  ) => StateT;
+
+  export type SharedPropsT = {
+    /** Renders UI in 'focus' state */
+    $isFocused: boolean;
+    /** Renders UI in 'disabled' state */
+    $disabled: boolean;
+    /** Renders UI in 'error' state */
+    $error: boolean;
+    /** Renders UI in 'positive' state */
+    $positive: boolean;
+    /** Defines styles for inputs that are grouped with other controls. */
+    $adjoined: AdjoinedT;
+    /** Renders UI in provided size. */
+    $size: SizeT;
+    /** Renders UI in 'required' state */
+    $required: boolean;
+    $position: ENHANCER_POSITION;
+  };
+
+  // TODO - Fix This
+  export type PropsT = any;
+
+  export type BaseInputComponentsT = {
+    InputContainer?: OverrideT<SharedPropsT>;
+    Input?: OverrideT<SharedPropsT>;
+    Before?: OverrideT<SharedPropsT>;
+    After?: OverrideT<SharedPropsT>;
+  };
+
+  export type InputComponentsT = {
+    Root?: OverrideT<SharedPropsT>;
+    StartEnhancer?: OverrideT<SharedPropsT>;
+    EndEnhancer?: OverrideT<SharedPropsT>;
+  } & BaseInputComponentsT;
+
+  export type BaseInputPropsT<T> = {
+    /** Sets aria-label attribute. */
+    "aria-label"?: string;
+    /** Sets aria-labelledby attribute. */
+    "aria-labelledby"?: string;
+    /** Sets aria-describedby attribute. */
+    "aria-describedby"?: string;
+    /** Defines styles for inputs that are grouped with other controls. */
+    adjoined?: AdjoinedT;
+    /** Determines if browser should provide value suggestions. */
+    autoComplete?: string;
+    /** If true the input will be focused on the first mount. */
+    autoFocus?: boolean;
+    /** Renders component in 'disabled' state. */
+    disabled?: boolean;
+    /** Renders component in 'error' state. */
+    error?: boolean;
+    /** Renders component in 'positive' state. */
+    positive?: boolean;
+    /** Id attribute value to be added to the input element and as a label's for attribute value. */
+    id?: string;
+    "data-baseweb"?: string;
+    /** A  hint as to the type of data that might be entered by the user while editing the element or its contents. */
+    inputMode?: string;
+    /** A ref to access an input element. */
+    inputRef?: React.Ref<HTMLInputElement | null>;
+    name?: string;
+    onBlur?: (e: React.ChangeEvent<T>) => void;
+    onChange?: (e: React.ChangeEvent<T>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<T>) => void;
+    onKeyPress?: (e: React.KeyboardEvent<T>) => void;
+    onKeyUp?: (e: React.KeyboardEvent<T>) => void;
+    onFocus?: (e: React.ChangeEvent<T>) => void;
+    overrides?: BaseInputComponentsT;
+    placeholder?: string;
+    /** Renders component in 'required' state. */
+    required?: boolean;
+    /** Renders component in provided size. */
+    size?: SizeT;
+    /** Input type attribute. */
+    type?: string;
+    /** Input value attribute. */
+    value?: string;
+    rows?: number;
+  };
+
+  export type InputPropsT = {
+    overrides?: InputComponentsT;
+    /** An input helper rendered before and attached to the input field. */
+    startEnhancer?:
+      | React.ReactNode
+      | ((props: SharedPropsT) => React.ReactNode);
+    /** An input helper rendered after and attached to the input field. */
+    endEnhancer?: React.ReactNode | ((props: SharedPropsT) => React.ReactNode);
+    /** Handler for the `focus` event. */
+    onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    /** Handler for the `blur` event. */
+    onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  } & BaseInputPropsT<HTMLInputElement>;
+
+  export type MaskedInputPropsT = {
+    /** See pattern examples here: https://github.com/sanniassin/react-input-mask */
+    mask?: string;
+    /** Character to render for unfilled mask element. */
+    maskChar?: string;
+  } & InputPropsT;
+
+  export type StatefulContainerPropsT<T> = {
+    children?: (props: PropsT) => React.ReactNode;
+    /** Initial state of an uncontrolled input component. */
+    initialState?: StateT;
+    /** A state change handler. Used to override default state transitions. */
+    stateReducer?: StateReducerT;
+    onChange?: (e: React.ChangeEvent<T>) => void;
+  };
+
+  type OmitPropsT = {
+    overrides: InputComponentsT;
+    children: (props: PropsT) => React.ReactNode;
+  };
+
+  type FullStPropsT = InputPropsT & StatefulContainerPropsT<HTMLInputElement>;
+
+  export type StInputPropsDiffT = Diff<FullStPropsT, OmitPropsT>;
+
+  export type StatefulInputPropsT = {
+    overrides?: InputComponentsT;
+  } & StInputPropsDiffT;
+
+  export class StatefulInput extends React.Component<StatefulInputPropsT> {}
+  export class StatefulContainer<T extends EventTarget> extends React.Component<
+    StatefulContainerPropsT<T>
+  > {}
+  export class Input extends React.Component<InputPropsT> {}
+  export class BaseInput<T extends EventTarget> extends React.Component<
+    BaseInputPropsT<T>
+  > {}
+  export class StyledRoot extends React.Component<SharedPropsT> {}
+  export class StyledInputEnhancer extends React.Component<SharedPropsT> {}
+  export class StyledStartEnhancer extends React.Component<SharedPropsT> {}
+  export class StyledEndEnhancer extends React.Component<SharedPropsT> {}
+  export class StyledInputContainer extends React.Component<SharedPropsT> {}
+  export class StyledInput extends React.Component<SharedPropsT> {}
+  export const ADJOINED: KeyMirror<ADJOINED>;
+  export const CUSTOM_INPUT_TYPE: KeyMirror<CUSTOM_INPUT_TYPE>;
+  export const STATE_CHANGE_TYPE: KeyMirror<STATE_CHANGE_TYPE>;
+  export const SIZE: KeyMirror<SIZE>;
+}
+
+declare module "baseui/layer" {
+  export type LayersManagerPropsT = {
+    children?: React.ReactNode;
+  };
+
+  export type LayersContextT = {
+    host: HTMLElement;
+  };
+
+  /** Layer */
+  export type LayerPropsT = {
+    /** Content to be rendered in the Layer. */
+    children?: React.ReactNode;
+    /** A DOM element where the Layer will be inserted into as a child.
+         The host value comes from the layers context provider.
+         If there is no `LayersManager` added and therefore no host element
+         in the context, `document.body` will be used as a container element. */
+    host?: HTMLElement;
+    /** Defines the location (child order) at which the layer will be inserted in
+     the `host` element. */
+    index?: number;
+    /** A custom DOM element where the layer is inserted to as a child.
+     Note that the `index` prop does not work with a custom `mountNode`. */
+    mountNode?: HTMLElement;
+    /** A handler that is called when the Layer is mounted. */
+    onMount?: () => void;
+    /** A handler that is called when the Layer is unmounted. */
+    onUnmount?: () => void;
+  };
+
+  export type LayerStateT = {
+    container: HTMLElement;
+  };
+
+  /** TetherBehavior */
+  type TetherPlacementT =
+    | "auto"
+    | "topLeft"
+    | "top"
+    | "topRight"
+    | "rightTop"
+    | "right"
+    | "rightBottom"
+    | "bottomRight"
+    | "bottom"
+    | "bottomLeft"
+    | "leftBottom"
+    | "left"
+    | "leftTop";
+
+  export type NormalizedOffsetT = {
+    top: number;
+    left: number;
+  };
+
+  export type NormalizedOffsetsT = {
+    arrow?: NormalizedOffsetT;
+    popper: NormalizedOffsetT;
+  };
+
+  export type PopperOffsetT = {
+    top?: number | null;
+    left?: number | null;
+  };
+
+  export type PopperDataObjectT = {
+    offsets: {
+      arrow?: PopperOffsetT;
+      popper: PopperOffsetT;
+    };
+    placement: string;
+  };
+
+  export type PopperOptionsT = {
+    placement: string;
+    modifiers: {
+      arrow: {};
+      computeStyle: {};
+      applyStyle: {};
+      applyReactStyle: {
+        fn: (data: PopperDataObjectT) => void;
+      };
+    };
+  };
+
+  export type TetherPropsT = {
+    /** The reference element used to position the popper. */
+    anchorRef?: HTMLElement;
+    /** The arrow element that is passed as an arrow modifier to alter
+     the popper positioning. */
+    arrowRef?: HTMLElement;
+    /** The element used as a popper. */
+    popperRef?: HTMLElement;
+    /** Content to be rendered in the Popper. */
+    children?: React.ReactNode;
+    /** A handler that is called when popper positioning changes. */
+    onPopperUpdate?: (
+      normalizedOffsets: NormalizedOffsetsT,
+      popperDataObject: PopperDataObjectT
+    ) => void;
+    /** Recommended placement of the popper. */
+    placement?: TetherPlacementT;
+    /** Options to be passes to the Popper on its initialization.
+         Refer to the [Popper documentation](https://popper.js.org/popper-documentation.html)
+         for the full list of available options. */
+    popperOptions?: any;
+  };
+
+  export type TetherStateT = {
+    isMounted: boolean;
+  };
+
+  export class Layer extends React.Component<LayerPropsT> {}
+  export class LayersManager extends React.Component<LayersManagerPropsT> {}
+  export class Tether extends React.Component<TetherPropsT> {}
+  export const TETHER_PLACEMENT: KeyMirror<TetherPlacementT>;
 }

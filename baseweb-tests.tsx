@@ -39,6 +39,8 @@ import {
 } from "baseui/header-navigation";
 import { Icon, StyledSvg, StyledComponentArgsT } from "baseui/icon";
 import ChevronLeft from "baseui/icon/chevron-left";
+import { ADJOINED, Input, StatefulInput, StyledInput } from "baseui/input";
+import { Layer, LayersManager, Tether, TETHER_PLACEMENT } from "baseui/layer";
 
 class StyledBlock extends React.Component<StyledBlockPropsT> {}
 
@@ -198,7 +200,7 @@ class TestComponent extends React.Component {
         />
 
         {/* Button */}
-        <Button size="compact" />
+        <Button size={SIZE.compact} kind={KIND.minimal} shape={SHAPE.default} />
         <Button
           overrides={{
             BaseButton: {
@@ -297,7 +299,7 @@ class TestComponent extends React.Component {
           }}
         />
         <StyledNavigationItem />
-        <StyledNavigationList $align="right" />
+        <StyledNavigationList $align={ALIGN.right} />
 
         {/* Icon */}
         <ChevronLeft size="wickedhuge" />
@@ -305,6 +307,82 @@ class TestComponent extends React.Component {
           overrides={{
             Svg: { style: ({ $theme, $size }) => ({}), component: StyledSvg }
           }}
+        />
+
+        {/* Input */}
+        <Input
+          onChange={e => e.target.value}
+          value={"byfiat"}
+          error
+          startEnhancer={({ $positive }) => <div />}
+        />
+        <StatefulInput
+          positive
+          placeholder="some text"
+          size={SIZE.default}
+          initialState={{ value: "default" }}
+        />
+
+        <Input
+          overrides={{
+            After: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            Before: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            EndEnhancer: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            Input: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            InputContainer: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            Root: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            },
+            StartEnhancer: {
+              style: ({ $theme, $disabled }) => ({
+                margin: $theme.sizing.scale100
+              }),
+              props: {},
+              component: ({ children, $disabled }) => <div />
+            }
+          }}
+        />
+
+        {/* Layer */}
+        <Layer onMount={() => {}} onUnmount={() => {}} />
+        <LayersManager />
+        <Tether
+          onPopperUpdate={({ arrow, popper }, { offsets, placement }) => {}}
+          placement={TETHER_PLACEMENT.right}
         />
       </>
     );
